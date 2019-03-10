@@ -1,0 +1,10 @@
+- name: Download Slack
+  get_url:
+    url: "https://downloads.slack-edge.com/linux_releases/slack-desktop-{{ version }}-amd64.deb"
+    dest: "/tmp/slack-desktop-{{ version }}-amd64.deb"
+  ignore_errors: yes
+
+- name: Install Slack
+  apt:
+    deb: "/tmp/slack-desktop-{{ version }}-amd64.deb"
+  ignore_errors: yes

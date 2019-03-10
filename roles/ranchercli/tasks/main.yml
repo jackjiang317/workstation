@@ -1,0 +1,10 @@
+---
+- name: Download rancher cli
+  get_url:
+    url: "https://github.com/rancher/cli/releases/download/{{ version }}/rancher-linux-amd64-{{ version }}.tar.gz"
+    dest: "/tmp/rancher-linux-amd64-{{ version }}.tar.gz"
+
+- name: Extract rancher cli
+  unarchive:
+    src: "/tmp/rancher-linux-amd64-{{ version }}.tar.gz"
+    dest: /opt

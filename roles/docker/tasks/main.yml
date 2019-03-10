@@ -1,0 +1,66 @@
+- name: Install prerequisites
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: Add Docker GPG key
+  apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+
+- name: Add Docker APT repo
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
+  
+- name: Install docker
+  apt:
+    name: docker-ce={{ version }}*
+    state: present
+    update_cache: yes
+
+- name: Create docker group
+  group:
+    name: docker
+    state: present
+    
+- name: Add user to docker group
+  user:
+    name: "{{ lookup('env', 'USER') }}"
+    group: docker
+
+- name: Create docker config directory
+  file:
+    path: /etc/docker/
+    state: directory
+
+#- name: Configure docker dns
+#  copy:
+#    src: daemon.json
+#    dest: /etc/docker/daemon.json
+
+- name: Create docker systemd directory
+  file:
+    path: /etc/systemd/system/docker.service.d/
+    state: directory
+
+#- name: Configure docker http proxy
+#  copy:
+#    src: "{{ item }}"
+#    dest: "/etc/systemd/system/docker.service.d/{{ item }}"
+#  with_items:
+#    - http-proxy.conf
+#    - insecure-registry.conf
+#    - 10-parameterized.conf
+#  tags:
+#    - proxy
+
+- name: Enable docker
+  systemd:
+    name: docker
+    enabled: yes
+
+- name: Flush role handlers
+  meta: flush_handlers

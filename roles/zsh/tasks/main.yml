@@ -1,0 +1,12 @@
+---
+# Setup
+- import_tasks: setup-ubuntu.yml
+  when: ansible_os_family == 'Debian'
+
+- import_tasks: setup-macos.yml
+  when: ansible_os_family == 'Darwin'
+
+# Extra cake
+- name: install oh-my-zsh
+  shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+

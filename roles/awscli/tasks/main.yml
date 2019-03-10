@@ -1,0 +1,51 @@
+- name: Install awscli with dependencies
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - boto
+    - boto3
+    - botocore
+    - awscli
+
+- name: Add IAG-CA cert to boto installation
+  blockinfile:
+    path: /usr/local/lib/python2.7/dist-packages/boto/cacerts/cacerts.txt
+    block: "{{ lookup('file', '/usr/local/share/ca-certificates/IAG-CA.crt') }}"
+
+- name: install jq
+  package:
+    name: jq
+
+#- name: install assume-role
+#  get_url:
+#    url: https://raw.githubusercontent.com/William-Luo0/assume-role/master/assume-role
+#    dest: /usr/local/bin/assume-role
+#    mode: 0755
+
+- name: change default of no ssl
+  lineinfile:
+    path: /usr/local/bin/assume-role
+    regexp: '\s*no_ssl='
+    line: '  no_ssl=${5:-"true"}'
+
+- name: ensure dependencies exist
+  become: false
+  file:
+    path: "{{ item.name }}"
+    state: "{{ item.type }}"
+  with_items:
+    - { name: ~/.aws, type: directory }
+    - { name: ~/.zshrc, type: touch }
+
+- name: copy aws account config
+  become: false
+  copy:
+    src: accounts
+    dest: ~/.aws/accounts
+
+- name: update zshrc
+  become: false
+  lineinfile:
+    path: ~/.zshrc
+    line: "source /usr/local/bin/assume-role"
+  ignore_errors: yes

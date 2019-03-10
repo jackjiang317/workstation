@@ -1,0 +1,19 @@
+- name: Download Intellij
+  unarchive:
+    src: "https://download.jetbrains.com/idea/ideaIC-{{ version }}.tar.gz"
+    dest: /opt
+    remote_src: yes
+
+- name: Create the applications directory if it does not exist
+  become: no
+  file:
+    path: "~/.local/share/applications"
+    state: directory
+    mode: 0755
+
+- name: Create Intellij shortcut
+  become: no
+  template:
+    src: jetbrains-idea-ce.desktop
+    dest: "~/.local/share/applications/jetbrains-idea-ce.desktop"
+    mode: 0600

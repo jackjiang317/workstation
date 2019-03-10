@@ -1,0 +1,37 @@
+- name: Install opscli with dependencies
+  package:
+    name: "{{ item }}"
+  with_items:
+    - jq
+
+- name: install openstack cli
+  pip:
+    name: "python-{{ item }}client"
+  with_items:
+    - openstack
+    - barbican
+    - ceilometer
+    - cinder
+    - cloudkitty
+    - designate
+    - fuel
+    - glance
+#    - gnocchi
+    - heat
+    - magnum
+    - manila
+    - mistral
+    - monasca
+    - murano
+    - neutron
+    - nova
+    - senlin
+    - swift
+    - trove
+
+#gnocchi can't be installed as "pip install python-gnocchiclient"
+#It should be installed as "pip install gnocchiclient"
+- name: install gnocchiclient cli
+  pip:
+    name: gnocchiclient
+

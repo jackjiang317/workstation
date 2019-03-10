@@ -1,0 +1,20 @@
+- name: Set Terraform version
+  set_fact:
+    hashicorp_app: "terraform"
+
+- name: Download App
+  get_url:
+    url: "https://releases.hashicorp.com/{{ hashicorp_app }}/{{ version }}/{{ hashicorp_app }}_{{ version }}_linux_amd64.zip"
+    dest: "/tmp/{{ hashicorp_app }}_{{ version }}_linux_amd64.zip"
+
+- name: Install App
+  unarchive:
+    src: "/tmp/{{ hashicorp_app }}_{{ version }}_linux_amd64.zip"
+    dest: /usr/local/bin
+
+- name: Install terraform docs
+  get_url:
+    url: "https://github.com/segmentio/terraform-docs/releases/download/v0.3.0/terraform-docs_linux_amd64"
+    dest: "/usr/local/bin/terraform-docs"
+    mode: 0755
+

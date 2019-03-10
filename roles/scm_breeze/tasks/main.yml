@@ -1,0 +1,11 @@
+- name: Download scm_breeze
+  become: false
+  git:
+    repo: 'https://github.com/scmbreeze/scm_breeze.git'
+    dest: ~/.scm_breeze
+  ignore_errors: yes
+
+- name: Install scm_breeze
+  become: false
+  shell: ~/.scm_breeze/install.sh
+  ignore_errors: yes

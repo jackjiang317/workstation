@@ -1,0 +1,13 @@
+---
+- name: Install kubectl
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{ k8_version }}/bin/linux/amd64/kubectl
+    dest: /usr/local/bin/kubectl
+    mode: 755
+
+- name: Load kubectl completion script
+  become: no
+  lineinfile:
+    path: "~/.bashrc"
+    regexp: '^source <\(kubectl completion bash\)'
+    line: 'source <(kubectl completion bash)'

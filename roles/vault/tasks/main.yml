@@ -1,0 +1,21 @@
+- name: Download vault
+  get_url:
+    url: "https://releases.hashicorp.com/vault/{{ version }}/vault_{{ version }}_linux_amd64.zip"
+    dest: "/tmp/vault_{{ version }}_linux_amd64.zip"
+
+- name: Install vault
+  unarchive:
+    src: "/tmp/vault_{{ version }}_linux_amd64.zip"
+    dest: /usr/local/bin
+    creates: /usr/local/bin/vault
+
+- name: Install sshpass
+  apt:
+    name: sshpass
+    state: present
+
+- name: Set vault server
+  lineinfile:
+    path: /etc/environment
+    regexp: 'VAULT_ADDR='
+    line: 'VAULT_ADDR=https://'

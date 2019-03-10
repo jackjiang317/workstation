@@ -1,0 +1,6 @@
+- name: Install molecule with dependencies
+  command: "pip install -I psutil=={{ version }}"
+
+- name: install molecule
+  pip:
+    name: molecule

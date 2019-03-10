@@ -1,0 +1,38 @@
+- name: Set manual system proxy
+  command: gsettings set org.gnome.system.proxy mode "manual"
+
+- name: Enable http system proxy
+  command: gsettings set org.gnome.system.proxy.http enabled true
+
+- name: Set system http proxy host
+  command: gsettings set org.gnome.system.proxy.http host "proxy.auiag.corp"
+
+- name: Set system http proxy port
+  command: gsettings set org.gnome.system.proxy.http port "8080"
+
+- name: Use same system proxy
+  command: gsettings set org.gnome.system.proxy use-same-proxy true
+
+- name: Set system no proxy
+  command: gsettings set org.gnome.system.proxy ignore-hosts "['localhost','127.0.0.1','*.auiag.corp','*.iag.com.au','*.iagcloud.net','*.iaglimited.net']"
+
+#- name: Set proxy username
+#  command: gsettings set org.gnome.system.proxy.http authentication-user "{{ username }}"
+#
+#- name: Set proxy password
+#  command: gsettings set org.gnome.system.proxy.http authentication-password "{{ password }}"
+
+- name: Set shell proxy settings
+  lineinfile:
+    path: /etc/environment
+    regexp: "^{{ item }}="
+    line: "{{ item }}=http://$username:$password@proxy.auiag.corp:8080"
+  with_items:
+    - http_proxy
+    - https_proxy
+
+- name: Set shell proxy settings
+  lineinfile:
+    path: /etc/environment
+    regexp: "^no_proxy="
+    line: "no_proxy=localhost,127.0.0.1,.auiag.corp,.iag.com.au,.iagcloud.net,.iaglimited.net"

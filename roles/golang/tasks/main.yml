@@ -1,0 +1,16 @@
+- name: Download golang
+  get_url:
+    url: https://storage.googleapis.com/golang/go{{ version }}.linux-amd64.tar.gz
+    dest: /tmp/go{{ version }}.linux-amd64.tar.gz
+
+- name: Install golang
+  unarchive:
+    src: /tmp/go{{ version }}.linux-amd64.tar.gz
+    dest: /usr/local
+    creates: /usr/local/go
+
+- name: Add go to PATH
+  become: no
+  lineinfile:
+    path: ~/.profile
+    line: "export PATH=$PATH:/usr/local/go/bin"

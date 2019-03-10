@@ -1,0 +1,29 @@
+---
+- hosts: localhost
+  become: true
+  roles:
+#    - zsh
+#    - opscli
+#    - docker
+#    - vault
+#    - packer
+#    - terminator
+#    - terraform
+#    - java
+#    - maven
+#    - intellij
+#    - chrome
+#    - scm_breeze
+#    - slack
+#    - golang
+#    - ruby
+#    - kubectl
+#    - kops
+#    - ranchercli
+#    - molecule
+#    - inspec
+#    - vagrant
+#    - test_kitchen
+#    - vi
+#    - virtualbox
+    - k8s

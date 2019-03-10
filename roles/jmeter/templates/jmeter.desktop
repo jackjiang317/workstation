@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=JMeter
+Icon=/opt/apache-jmeter-{{ jmeter_version }}/docs/images/jmeter_square.png
+Exec=/opt/apache-jmeter-{{ jmeter_version }}/bin/jmeter
+Comment=JMeter
+Terminal=false

@@ -1,0 +1,17 @@
+---
+- name: Install test-kitchen
+  gem:
+    name: test-kitchen
+
+- name: Install kitchen-ansible
+  gem:
+    name: kitchen-ansible
+
+- name: Install kitchen-docker
+  gem:
+    name: kitchen-docker
+
+- name: Install kitchen-vagrant
+  gem:
+    name: kitchen-vagrant
+

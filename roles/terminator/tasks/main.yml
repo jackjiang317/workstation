@@ -1,0 +1,17 @@
+---
+- name: Install Terminator
+  package:
+    name: terminator
+    state: present
+
+- name: Create Terminator directories
+  become: false
+  file:
+    path: ~/.config/terminator
+    state: directory
+
+- name: Configure Terminator
+  become: false
+  copy:
+    src: config
+    dest: ~/.config/terminator/config

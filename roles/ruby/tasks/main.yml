@@ -1,0 +1,11 @@
+- name: Install ruby
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - ruby{{ version }}
+    - ruby{{ version }}-dev
+
+- name: Create symlinks for Ruby
+  file: src=/usr/bin/ruby{{ version }} dest=/usr/local/bin/ruby state=link
+
+- name: Create symlinks for Ruby Gems
+  file: src=/usr/bin/gem{{ version }} dest=/usr/local/bin/gem state=link

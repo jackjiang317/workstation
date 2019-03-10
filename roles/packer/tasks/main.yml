@@ -1,0 +1,10 @@
+- name: Download packer
+  get_url:
+    url: "https://releases.hashicorp.com/packer/{{ version }}/packer_{{ version }}_linux_amd64.zip"
+    dest: "/tmp/packer_{{ version }}_linux_amd64.zip"
+
+- name: Install packer
+  unarchive:
+    src: "/tmp/packer_{{ version }}_linux_amd64.zip"
+    dest: /usr/local/bin
+    creates: /usr/local/bin/packer

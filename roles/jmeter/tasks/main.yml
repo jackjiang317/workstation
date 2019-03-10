@@ -1,0 +1,23 @@
+- name: Download jmeter
+  get_url:
+    url: http://mirror.ventraip.net.au/apache/jmeter/binaries/apache-jmeter-{{ jmeter_version }}.tgz
+    dest: "/tmp/apache-jmeter-{{ jmeter_version }}.tgz"
+
+- name: Install jmeter
+  unarchive:
+    src: "/tmp/apache-jmeter-{{ jmeter_version }}.tgz"
+    dest: /opt
+
+- name: Create the applications directory if it doesn't exist
+  become: no
+  file:
+    path: "~/.local/share/applications"
+    state: directory
+    mode: 0755
+
+- name: Create jmeter shortcut
+  become: no
+  template:
+    src: jmeter.desktop
+    dest: "~/.local/share/applications/jmeter.desktop"
+    mode: 0600

@@ -1,0 +1,15 @@
+---
+# Setup
+- import_tasks: setup-ubuntu.yml
+  when: ansible_os_family == 'Debian'
+
+- import_tasks: setup-macos.yml
+  when: ansible_os_family == 'Darwin'
+
+# Configure
+- name: Install vim settings
+  become: false
+  copy:
+    src: .vimrc
+    dest: ~/.vimrc
+

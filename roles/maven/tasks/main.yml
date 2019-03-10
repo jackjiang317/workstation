@@ -1,0 +1,17 @@
+- name: Install maven
+  apt:
+    name: maven
+    state: present
+
+- name: Create the .m2 directory if it doesn't exist
+  become: no
+  file:
+    path: "~/.m2"
+    state: directory
+    mode: 0755
+
+- name: Install maven settings
+  become: no
+  copy:
+    src: settings.xml
+    dest: ~/.m2/settings.xml
