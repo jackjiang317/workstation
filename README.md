@@ -12,10 +12,6 @@ If you are setting up your linux machine for the first time run the following:
 
 ./init.sh
 
-Then run the following
-
-./provision.sh
-
 # Updating
 To keep your machine up to date later on you can run:
 
