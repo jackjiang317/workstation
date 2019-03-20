@@ -7,14 +7,14 @@
 - name: Update /etc/hosts
   lineinfile:
     path: /etc/hosts
-    line: '"{{ host_ip }}"  kmaster'
+    line: '"{{ host_ip }}"  knode'
     create: yes
 
 - name: Change host name
   lineinfile:
     path: /etc/hostname
     regexp: '^ubuntu'
-    line: 'kmaster'
+    line: 'knode'
 
 - name: Setup static ip
   blockinfile:
@@ -24,8 +24,6 @@
       iface enp0s3 inet static
       address {{ host_ip }}
       netmask {{ netmask }}
-      gateway 10.0.2.2
-      dns-nameservers 10.0.2.2
 
 - name: Change host name
   lineinfile:
@@ -89,54 +87,4 @@
 - debug: var=host_ip
 - debug: var=network
 - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
-
-- name: Init k8s cluster
-  shell: kubeadm init --pod-network-cidr="{{ network }}"/24 --apiserver-advertise-address="{{ host_ip }}" && touch /tmp/kube_initialized
-  args:
-    creates: /tmp/kube_initialized
-
-
-- name: Update kube-controller-manager.yaml
-  lineinfile:
-    path: /etc/kubernetes/manifests/kube-controller-manager.yaml
-    regexp: '    - --node-cidr-mask-size=24'
-    line: '    - --node-cidr-mask-size=28'
-
-- name: get the username
-  become: false
-  local_action: command whoami
-  register: username_on_the_host
-
-- name: Make kube directory
-  become: false
-  file:
-    path: "/home/{{ username_on_the_host.stdout }}/.kube"
-    state: directory
-
-- name: get the primary group name
-  become: false
-  shell: "id -g -n {{ username_on_the_host.stdout }}"
-  register: groupname_on_the_host
-
-- name: Change admin.conf permission
-  become: true
-  file:
-    path: /etc/kubernetes/admin.conf
-    mode: "u=rw,g=r,o=r"
-
-- name: copy kubernetes admin config
-  copy:
-    src: /etc/kubernetes/admin.conf
-    dest: "/home/{{ username_on_the_host.stdout }}/.kube/config"
-    owner: "{{ username_on_the_host.stdout }}"
-    group: "{{ groupname_on_the_host.stdout }}"
-
-- name: apply calico networking
-  become: false
-  shell: |
-    kubectl apply -f https://docs.projectcalico.org/v3.5/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
-    kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
-    kubectl create serviceaccount dashboard -n default
-    kubectl create clusterrolebinding dashboard-admin -n default --clusterrole=cluster-admin --serviceaccount=default:dashboard
-
 
