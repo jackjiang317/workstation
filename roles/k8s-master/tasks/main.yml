@@ -1,3 +1,6 @@
+- name: switch off swap
+  shell: swapoff -a
+
 - name: Get host ip
   set_fact:
     host_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
